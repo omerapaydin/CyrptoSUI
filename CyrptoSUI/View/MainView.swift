@@ -28,16 +28,26 @@ struct MainView: View {
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity,alignment: .leading)
                 }
-            }.navigationTitle(Text("Crypto Crazy"))
-        }.onAppear{
-            cyrptoListViewModel.downloadCrypto(url: URL(string: "https://raw.githubusercontent.com/atilsamancioglu/K21-JSONDataSet/master/crypto.json")!)
+            }.toolbar(content: {
+                Button {
+                   
+                    Task.init {
+                        
+                        await cyrptoListViewModel.downloadCryptoAsync(url: URL(string: "https://raw.githubusercontent.com/atilsamancioglu/K21-JSONDataSet/master/crypto.json")!)
+                    }
+                } label: {
+                    Text("Refresh")
+                }
+
+            }).navigationTitle(Text("Crypto Crazy"))
+        }.task{
+            await cyrptoListViewModel.downloadCryptoAsync(url: URL(string: "https://raw.githubusercontent.com/atilsamancioglu/K21-JSONDataSet/master/crypto.json")!)
+            
+            
+            
         }
-        
-        
-        
     }
 }
-
 #Preview {
     MainView()
 }

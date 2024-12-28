@@ -7,12 +7,29 @@
 
 import Foundation
 
-
+@MainActor
 class CryptoListViewModel: ObservableObject {
 
     @Published var cryptoList = [CryptoViewModel]()
     
     let webservice = Webservice()
+    
+    
+    func downloadCryptoAsync(url: URL) async {
+        do {
+            let cryptos = try await webservice.downloadCurrenciesAsync(url: url)
+            self.cryptoList = cryptos.map(CryptoViewModel.init)
+        }catch {
+            print(error)
+        }
+        
+    }
+    
+    
+    
+    
+    
+    /*
     
     func downloadCrypto(url: URL) {
         
@@ -28,13 +45,9 @@ class CryptoListViewModel: ObservableObject {
                    }
                 }
             }
-            
-            
-            
         }
-        
-        
-    }
+    }*/
+    
     
     
 }
